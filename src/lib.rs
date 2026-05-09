@@ -11,7 +11,7 @@
 //! crate exists only to register the language with Zed and tell it how
 //! to start the server.
 
-use zed_extension_api::{self as zed, Result};
+use zed_extension_api::{self as zed, serde_json, Result};
 
 struct AwsumExtension;
 
@@ -48,6 +48,34 @@ impl zed::Extension for AwsumExtension {
             args: vec!["lsp".to_string(), "--stdio".to_string()],
             env: Vec::new(),
         })
+    }
+
+    /// Tell the server which `awsum` version this extension was built
+    /// against. The server compares against the compiler's own version
+    /// and pushes a `window/showMessage` warning on mismatch — same
+    /// lockstep guarantee as `awsum-vscode`, expressed via the
+    /// LSP-standard `initializationOptions` payload.
+    ///
+    /// `env!("CARGO_PKG_VERSION")` resolves at compile time to the
+    /// version string in [`Cargo.toml`], which the release process
+    /// keeps in lockstep with the awsum compiler version.
+    fn language_server_initialization_options(
+        &mut self,
+        _server_id: &zed::LanguageServerId,
+        _worktree: &zed::Worktree,
+    ) -> Result<Option<serde_json::Value>> {
+        // `expectedAwsumVersion` triggers the lockstep version check.
+        // `preferButtonsOverLinks: false` tells the server to render
+        // the mismatch warning via `window/showMessage` with the URL
+        // inline — Zed auto-linkifies notification URLs but currently
+        // doesn't open external https URLs from `window/showDocument`,
+        // so a button-driven path would surface a non-functional
+        // button. The default is `false` already; we set it
+        // explicitly to document the editor's UX choice.
+        Ok(Some(serde_json::json!({
+            "expectedAwsumVersion": env!("CARGO_PKG_VERSION"),
+            "preferButtonsOverLinks": false,
+        })))
     }
 }
 

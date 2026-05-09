@@ -36,7 +36,14 @@ The tree-sitter grammar itself lives in [`awsum-lang/tree-sitter-awsum`](https:/
 
 `awsum-zed A.B.C` ↔ `awsum A.B.C` ↔ `tree-sitter-awsum A.B.C` ↔ `awsum-vscode A.B.C`. One version, four artefacts. The lockstep convention is enforced because the LSP server lives inside the `awsum` binary itself, not in a separate `awsum-lsp` artefact.
 
-**Known limitation (v0):** unlike `awsum-vscode`, this extension does **not** check the version reported by `serverInfo` against its manifest version. `zed_extension_api` doesn't expose the LSP `initialize` response to the extension code, so we have no clean hook to compare. A user with a mismatched `awsum` on PATH will see degraded behavior (features added on either side that the other doesn't implement) without an explicit warning. If this matters in practice, options are: (1) shell out to `awsum --version` from `language_server_command` and compare manually, or (2) request `initializeResult` access from upstream `zed_extension_api`.
+**The version is duplicated in two places inside this repo.** Zed's manifest format requires both:
+
+- `extension.toml` ⇒ what Zed's UI / marketplace displays as the installed version.
+- `Cargo.toml` ⇒ baked into the wasm via `env!("CARGO_PKG_VERSION")`, used by `language_server_initialization_options` to populate `expectedAwsumVersion`.
+
+A release-time bump must touch both. [`build.rs`](build.rs) runs at every `cargo build` / `cargo check`, parses `extension.toml`, and panics if its `version` field disagrees with `CARGO_PKG_VERSION`. So drift fails the build with a clear message — never silently lands a wrong-version release.
+
+**Mismatch detection (against the compiler).** `language_server_initialization_options` ships `{"expectedAwsumVersion": env!("CARGO_PKG_VERSION")}` in the LSP `initialize` request. The server compares against its own (compiler) version and pushes a `window/showMessage` warning on mismatch. Same code path runs for `awsum-vscode` and any other LSP client that opts in.
 
 ## Related Repositories
 
