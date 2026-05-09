@@ -1,0 +1,22 @@
+[package]
+name = "awsum-zed"
+version = "0.0.3"
+edition = "2021"
+license = "MIT"
+publish = false
+description = "Zed extension for the Awsum programming language"
+repository = "https://github.com/awsum-lang/awsum-zed"
+
+[lib]
+# Zed loads extensions as WebAssembly modules; the cdylib crate type is
+# what `cargo build --target wasm32-wasip2` produces.
+crate-type = ["cdylib"]
+
+[dependencies]
+zed_extension_api = "0.7"
+
+[profile.release]
+# Keep the .wasm small — Zed downloads the extension binary on first use.
+opt-level = "s"
+lto = true
+strip = true

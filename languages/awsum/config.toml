@@ -1,0 +1,26 @@
+name = "Awsum"
+grammar = "awsum"
+path_suffixes = ["aww"]
+
+# Single-line comments are `--` (everything to end-of-line). The trailing
+# space is convention-correct and matches how `awsum format` emits them.
+line_comments = ["-- "]
+
+# Block-comment markers — Awsum allows `{- ... -}` which the lexer
+# nests, though the tree-sitter grammar only recognises non-nested form.
+# The `block_comment` field ships the open/close pair so Zed can
+# wrap-with-comment using the same delimiters.
+block_comment = ["{- ", " -}"]
+
+# Auto-close pairs. Mirror the existing `awsum-vscode/language-configuration.json`
+# choices so muscle-memory carries over.
+brackets = [
+  { start = "(", end = ")", close = true, newline = true },
+  { start = "{-", end = "-}", close = true, newline = false },
+  { start = "\"", end = "\"", close = true, newline = false, not_in = ["string", "comment"] },
+]
+
+# Run the formatter (and any other LSP code-actions tagged `source.organizeImports`,
+# etc.) on save. The user can override this through Zed's per-language settings.
+[format_on_save]
+on = true
