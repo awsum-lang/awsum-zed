@@ -12,7 +12,7 @@ repository = "https://github.com/awsum-lang/awsum-zed"
 # (`tree-sitter-awsum A.B.C` ↔ `awsum A.B.C`).
 [grammars.awsum]
 repository = "https://github.com/awsum-lang/tree-sitter-awsum"
-commit = "ea153f669fb8659d387cf899fef01718000524bf"
+commit = "7ba98d69aff927036debbbe0f2b36cdfd09d1871"
 
 # The language server is the same `awsum` binary the user already installs
 # for the CLI — we just invoke it with the `lsp` subcommand. See `src/lib.rs`
