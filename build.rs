@@ -27,11 +27,9 @@ fn main() {
     println!("cargo:rerun-if-changed=extension.toml");
     println!("cargo:rerun-if-changed=Cargo.toml");
 
-    let cargo_version =
-        env::var("CARGO_PKG_VERSION").expect("CARGO_PKG_VERSION set by Cargo");
+    let cargo_version = env::var("CARGO_PKG_VERSION").expect("CARGO_PKG_VERSION set by Cargo");
 
-    let manifest_dir =
-        env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR set by Cargo");
+    let manifest_dir = env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR set by Cargo");
     let ext_path = Path::new(&manifest_dir).join("extension.toml");
     let ext_content = fs::read_to_string(&ext_path)
         .unwrap_or_else(|e| panic!("read {}: {e}", ext_path.display()));
@@ -58,8 +56,8 @@ fn main() {
         }
     }
 
-    let ext_version = ext_version
-        .expect("extension.toml is missing a top-level `version = \"...\"` field");
+    let ext_version =
+        ext_version.expect("extension.toml is missing a top-level `version = \"...\"` field");
 
     if ext_version != cargo_version {
         panic!(

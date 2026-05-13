@@ -31,14 +31,12 @@ impl zed::Extension for AwsumExtension {
         // Zed surfaces the `Err` as a non-blocking notification — the
         // user sees a clear "awsum not found in PATH" rather than a
         // mysterious silent no-op.
-        let command = worktree
-            .which("awsum")
-            .ok_or_else(|| {
-                "couldn't find the `awsum` binary on PATH. Install it from \
+        let command = worktree.which("awsum").ok_or_else(|| {
+            "couldn't find the `awsum` binary on PATH. Install it from \
                  https://github.com/awsum-lang/awsum (or via `stack install` \
                  from a checkout) and ensure the install directory is on PATH."
-                    .to_string()
-            })?;
+                .to_string()
+        })?;
 
         // `--stdio` is part of the contract — `awsum lsp` requires the
         // transport flag explicitly (no defaulting), same shape the

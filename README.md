@@ -20,7 +20,14 @@ All of the above are powered by the `awsum` compiler's bundled language server â
 
 ## Versioning
 
-`awsum-zed A.B.C` is built and tested against `awsum A.B.C`. Mismatched versions are not supported.
+`awsum-zed A.B.C` is built and tested against `awsum A.B.C`. Mismatched versions are not supported â€” at startup the language server compares the extension's expected version against its own and shows a Zed notification on mismatch.
+
+## Related
+
+- Compiler (hosts `awsum lsp`): [awsum-lang/awsum](https://github.com/awsum-lang/awsum)
+- Tree-sitter grammar: [awsum-lang/tree-sitter-awsum](https://github.com/awsum-lang/tree-sitter-awsum)
+- VSCode extension: [awsum-lang/awsum-vscode](https://github.com/awsum-lang/awsum-vscode)
+- Website: [awsum-lang.org](https://awsum-lang.org)
 
 ## License
 

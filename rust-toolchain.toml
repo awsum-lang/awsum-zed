@@ -1,0 +1,7 @@
+# Pin the local toolchain to the same version CI uses
+# (see `.github/workflows/ci.yml` → `dtolnay/rust-toolchain@1.93.1`).
+# rustup auto-installs this on the next `cargo` invocation.
+[toolchain]
+channel = "1.93.1"
+targets = ["wasm32-wasip2"]
+components = ["rustfmt", "clippy"]
