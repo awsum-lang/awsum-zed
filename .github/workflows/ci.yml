@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  workflow_call:
+    inputs:
+      upload-artifacts:
+        description: "Upload the built .wasm as a workflow artifact (consumed by the release workflow)."
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@1.93.1
+        with:
+          targets: wasm32-wasip2
+          components: rustfmt, clippy
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Check formatting
+        run: cargo fmt --check
+
+      - name: Clippy
+        run: cargo clippy --target wasm32-wasip2 --all-targets -- -D warnings
+
+      # build.rs panics if Cargo.toml and extension.toml disagree on `version`,
+      # so the consistency check happens as a side effect of the build.
+      - name: Build
+        run: cargo build --target wasm32-wasip2 --release
+
+      - name: Read version
+        if: inputs.upload-artifacts
+        id: version
+        run: |
+          set -euo pipefail
+          version=$(grep -m1 '^version *= *' Cargo.toml | cut -d'"' -f2)
+          echo "value=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Stage artifact
+        if: inputs.upload-artifacts
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          cp target/wasm32-wasip2/release/awsum_zed.wasm \
+            "dist/awsum-zed-${{ steps.version.outputs.value }}.wasm"
+
+      - name: Upload .wasm artifact
+        if: inputs.upload-artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: awsum-zed-${{ steps.version.outputs.value }}-wasm
+          path: dist/awsum-zed-${{ steps.version.outputs.value }}.wasm
+          if-no-files-found: error
+          retention-days: 7

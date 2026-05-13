@@ -1,0 +1,84 @@
+name: Release
+
+# Tag is the source of truth: pushing `v*` is what creates an immutable release
+# tied to a specific commit. There is intentionally no `workflow_dispatch` here —
+# if a release run fails, delete the tag, fix, retag.
+on:
+  push:
+    tags:
+      - "v*"
+
+# Don't cancel a release mid-flight if a second tag arrives somehow.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # `cargo build` reads the version from `Cargo.toml`, so a tag/Cargo.toml
+  # mismatch would silently produce an asset whose name disagrees with the
+  # release tag. Fail fast before the build. (build.rs separately enforces
+  # Cargo.toml == extension.toml during the build itself.)
+  verify-version:
+    name: Verify tag matches Cargo.toml
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Check version
+        run: |
+          set -euo pipefail
+          tag_version="${GITHUB_REF_NAME#v}"
+          pkg_version=$(grep -m1 '^version *= *' Cargo.toml | cut -d'"' -f2)
+          if [[ "$tag_version" != "$pkg_version" ]]; then
+            echo "Tag $GITHUB_REF_NAME implies version $tag_version, but Cargo.toml has $pkg_version" >&2
+            exit 1
+          fi
+
+  ci:
+    needs: verify-version
+    uses: ./.github/workflows/ci.yml
+    with:
+      upload-artifacts: true
+
+  release:
+    name: Publish GitHub Release
+    needs: ci
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      # Required for `gh release create` to upload assets.
+      contents: write
+      # Required for `actions/attest-build-provenance` — it mints an OIDC token
+      # to identify the workflow to Sigstore, and writes the attestation entry.
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Download .wasm artifact
+        uses: actions/download-artifact@v8
+        with:
+          pattern: awsum-zed-*-wasm
+          path: dist
+          merge-multiple: true
+
+      # Users verify with:
+      #   gh attestation verify awsum-zed-X.Y.Z.wasm --repo awsum-lang/awsum-zed
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: dist/*.wasm
+
+      # The Zed extension registry itself is updated via a manual PR to
+      # `zed-industries/extensions` bumping the version + commit pin — there is
+      # no API for it. This GitHub Release is for archival + provenance only.
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --notes "See [CHANGELOG.md](./CHANGELOG.md)" \
+            dist/*.wasm
