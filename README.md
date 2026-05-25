@@ -39,6 +39,10 @@ Stops the `awsum lsp` process for the active buffer and starts a new one with th
 - VSCode extension: [awsum-lang/awsum-vscode](https://github.com/awsum-lang/awsum-vscode)
 - Website: [awsum-lang.org](https://awsum-lang.org)
 
+## AI use
+
+This Zed extension is developed with substantial usage of generative AI. Every generated change is reviewed, edited, and accepted by a human before it lands in the repository, and no output is shipped unedited.
+
 ## License
 
-MIT — see [LICENSE](LICENSE).
+Apache 2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE).
