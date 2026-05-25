@@ -2,7 +2,7 @@
 name = "awsum-zed"
 version = "0.0.4"
 edition = "2021"
-license = "MIT"
+license = "Apache-2.0"
 publish = false
 description = "Zed extension for the Awsum programming language"
 repository = "https://github.com/awsum-lang/awsum-zed"
