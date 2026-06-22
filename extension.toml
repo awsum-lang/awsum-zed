@@ -1,6 +1,6 @@
 id = "awsum"
 name = "Awsum"
-version = "0.0.6"
+version = "0.0.7"
 schema_version = 1
 authors = ["Vladimir Logachev <vladimir@logachev.dev>"]
 description = "Awsum language support for Zed: syntax highlighting, format on save, diagnostics, quick fixes, document/workspace symbols. Backed by the bundled `awsum lsp` language server (one binary, lockstep with the compiler — see https://github.com/awsum-lang/awsum)."
@@ -12,7 +12,7 @@ repository = "https://github.com/awsum-lang/awsum-zed"
 # (`tree-sitter-awsum A.B.C` ↔ `awsum A.B.C`).
 [grammars.awsum]
 repository = "https://github.com/awsum-lang/tree-sitter-awsum"
-commit = "cf5ab281edcc4df07da9f47ad795dc86a492dbea"
+commit = "bf10355f931d6431b72d1a22d932c24dc1b310ba"
 
 # The language server is the same `awsum` binary the user already installs
 # for the CLI — we just invoke it with the `lsp` subcommand. See `src/lib.rs`
