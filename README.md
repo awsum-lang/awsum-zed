@@ -47,6 +47,8 @@ Stops the `awsum lsp` process for the active buffer and starts a new one with th
 
 `awsum-zed A.B.C` is built and tested against `awsum A.B.C`. Mismatched versions are not supported — at startup the language server compares the extension's expected version against its own and shows a Zed notification on mismatch.
 
+Supported editor versions follow Awsum's [platform version policy](https://github.com/awsum-lang/awsum/blob/main/docs/platform-version-policy.md#editors): the minimum is the newest stable release that has been out for at least 7 days.
+
 ## Related
 
 - Compiler (hosts `awsum lsp`): [awsum-lang/awsum](https://github.com/awsum-lang/awsum)
