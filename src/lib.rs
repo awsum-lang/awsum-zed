@@ -6,8 +6,8 @@
 //! `awsum-lsp` to install — and no version-skew possible between the
 //! editor and the compiler.
 //!
-//! Every feature the user sees (diagnostics, quick fixes, format, outline,
-//! workspace symbols) is delivered by the `awsum lsp` server itself; this
+//! Every feature the user sees (diagnostics, quick fixes, format, hover,
+//! outline, workspace symbols) is delivered by the `awsum lsp` server itself; this
 //! crate exists only to register the language with Zed and tell it how
 //! to start the server.
 

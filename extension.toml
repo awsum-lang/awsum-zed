@@ -1,18 +1,18 @@
 id = "awsum"
 name = "Awsum"
-version = "0.0.7"
+version = "0.0.8"
 schema_version = 1
 authors = ["Vladimir Logachev <vladimir@logachev.dev>"]
-description = "Awsum language support for Zed: syntax highlighting, format on save, diagnostics, quick fixes, document/workspace symbols. Backed by the bundled `awsum lsp` language server (one binary, lockstep with the compiler — see https://github.com/awsum-lang/awsum)."
+description = "Awsum language support for Zed: syntax highlighting, format on save, diagnostics, quick fixes, hover, document/workspace symbols. Backed by the bundled `awsum lsp` language server (one binary, lockstep with the compiler — see https://github.com/awsum-lang/awsum)."
 repository = "https://github.com/awsum-lang/awsum-zed"
 
 # Tree-sitter grammar lives in its own repo so it's reusable across editors
-# (Zed, Helix, Neovim, Emacs ts-mode, GitHub linguist). The commit pin is
-# updated each release; grammar versioning is lockstep with the compiler
-# (`tree-sitter-awsum A.B.C` ↔ `awsum A.B.C`).
+# (Zed, Neovim, Emacs). The commit pin is updated each release; grammar
+# versioning is lockstep with the compiler (`tree-sitter-awsum A.B.C` ↔
+# `awsum A.B.C`).
 [grammars.awsum]
 repository = "https://github.com/awsum-lang/tree-sitter-awsum"
-commit = "bf10355f931d6431b72d1a22d932c24dc1b310ba"
+commit = "5083fc9e0bdd72ece769cc388b9abdd19e5b0ec0"
 
 # The language server is the same `awsum` binary the user already installs
 # for the CLI — we just invoke it with the `lsp` subcommand. See `src/lib.rs`

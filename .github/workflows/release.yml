@@ -35,6 +35,38 @@ jobs:
             exit 1
           fi
 
+  # Release-time invariant: languages/awsum/*.scm are copies of
+  # tree-sitter-awsum's queries at the commit pinned in extension.toml (Zed
+  # reads queries only from the extension). Between releases a grammar change
+  # edits both repos together, so the copies can legitimately run ahead of the
+  # pin until the next tree-sitter-awsum release — this check only fires at
+  # tag time, when the pin becomes a release artifact. If it fails, delete
+  # the tag, run `just sync-queries`, commit, retag.
+  query-drift:
+    name: Queries match pinned tree-sitter-awsum commit
+    needs: verify-version
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout awsum-zed
+        uses: actions/checkout@v7
+        with:
+          path: awsum-zed
+
+      - name: Read pinned commit
+        id: pin
+        run: echo "commit=$(sed -n 's/^commit = "\([0-9a-f]*\)"$/\1/p' awsum-zed/extension.toml)" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout tree-sitter-awsum at pinned commit
+        uses: actions/checkout@v7
+        with:
+          repository: awsum-lang/tree-sitter-awsum
+          ref: ${{ steps.pin.outputs.commit }}
+          path: tree-sitter-awsum
+
+      - name: Check drift
+        run: awsum-zed/scripts/check-queries.sh
+
   ci:
     needs: verify-version
     uses: ./.github/workflows/ci.yml
@@ -43,7 +75,7 @@ jobs:
 
   release:
     name: Publish GitHub Release
-    needs: ci
+    needs: [ci, query-drift]
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     permissions:

@@ -24,6 +24,14 @@ lint:
 fmt:
   cargo fmt
 
+# Copy tree-sitter-awsum's queries at the commit pinned in extension.toml into languages/awsum/
+sync-queries:
+  scripts/sync-queries.sh
+
+# Verify languages/awsum/*.scm match tree-sitter-awsum at the pinned commit (the release workflow gates this)
+check-queries:
+  scripts/check-queries.sh
+
 # Confirm potentially dangerous actions with a specific confirmation input (e.g. version, environment name)
 [private]
 manual-confirmation-input message required_confirmation:

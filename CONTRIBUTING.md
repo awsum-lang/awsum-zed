@@ -11,9 +11,11 @@ rustup target add wasm32-wasip2
 cargo build --target wasm32-wasip2 --release
 ```
 
-The extension shells out to the `awsum` CLI for diagnostics, formatting, code actions, and document/workspace symbols — install it from the [compiler repo](https://github.com/awsum-lang/awsum) before testing changes that touch those features.
+Every editor feature (diagnostics, formatting, code actions, hover, document/workspace symbols) comes from the `awsum lsp` server inside the compiler binary — install it from the [compiler repo](https://github.com/awsum-lang/awsum) before testing changes that touch those features.
 
 To try a local build inside Zed: open the command palette → `zed: install dev extension` → point at this directory. Zed compiles the wasm and registers the language server on the spot; subsequent rebuilds require running the command again.
+
+The Tree-sitter queries in [languages/awsum/](languages/awsum/) (`highlights.scm`, `outline.scm`) are copies of [`tree-sitter-awsum`](https://github.com/awsum-lang/tree-sitter-awsum)'s, taken at the commit pinned in [extension.toml](extension.toml): Zed reads queries only from the extension. Change a query upstream, not here. After moving the pin, `just sync-queries` copies the queries at the new commit (it reads them from a `tree-sitter-awsum` checkout next to this repo); `just check-queries` verifies the copies, and the release workflow refuses a tag whose queries don't match the pin.
 
 ## Developer Certificate of Origin
 

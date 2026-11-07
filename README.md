@@ -8,6 +8,7 @@ Zed extension for the [Awsum](https://awsum-lang.org) programming language (`.aw
 - Format on save
 - Inline diagnostics (errors + warnings)
 - Quick fixes (lightbulb code actions)
+- Hover: type and doc comment of the name under the cursor
 - Document outline / breadcrumbs
 - Workspace symbol search (`Cmd+T` / `Ctrl+T`)
 
