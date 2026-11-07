@@ -58,7 +58,7 @@ Supported editor versions follow Awsum's [platform version policy](https://githu
 
 ## AI use
 
-This Zed extension is developed with substantial usage of generative AI. Every generated change is reviewed, edited, and accepted by a human before it lands in the repository, and no output is shipped unedited.
+This Zed extension is developed with substantial usage of generative AI.
 
 ## License
 
