@@ -5,7 +5,7 @@ Zed extension for the [Awsum](https://awsum-lang.org) programming language (`.aw
 ## Features
 
 - Syntax highlighting (Tree-sitter)
-- Format on save
+- Formatting (`editor: format`; on save once enabled — see [Format on save](#format-on-save))
 - Inline diagnostics (errors + warnings)
 - Quick fixes (lightbulb code actions)
 - Hover: type and doc comment of the name under the cursor
@@ -18,6 +18,20 @@ All of the above are powered by the `awsum` compiler's bundled language server �
 
 1. Install the Awsum compiler (see [awsum-lang/awsum](https://github.com/awsum-lang/awsum)) and ensure `awsum` is on your `PATH`.
 2. Open Zed → `Cmd+Shift+P` → `zed: extensions` → search "Awsum" → Install.
+
+## Format on save
+
+Zed turns format-on-save on only for the languages listed in its own default settings, and an extension cannot add itself to that list. To format `.aww` files on save, enable it for Awsum in your Zed `settings.json`:
+
+```json
+{
+  "languages": {
+    "Awsum": { "format_on_save": "on" }
+  }
+}
+```
+
+Formatting runs the same algorithm as `awsum format`.
 
 ## Restart the LSP server
 

@@ -21,6 +21,7 @@ Until `awsum 1.0.0`, the project does not follow SemVer — every release increm
 
 - Lockstep release with `awsum` 0.0.8.
 - Rust toolchain 1.93.1 → 1.99.1 (local `rust-toolchain.toml` and CI); `Cargo.lock` regenerated.
+- Format on save is no longer advertised as built in. Since Zed turned format-on-save off by default (June 2026), it applies to Awsum only once enabled in the user's settings; the README now shows the setting. The `[format_on_save]` table in `languages/awsum/config.toml` is removed — Zed never read it (its language config has no such field); format-on-save used to work only because of Zed's former global default.
 - `just sync-queries` copies `tree-sitter-awsum`'s queries at the commit pinned in `extension.toml`, and `just check-queries` verifies them. The release workflow runs the check on every tag, so the copies can no longer drift from the pinned grammar.
 - The README lists hover (type and doc comment of the name under the cursor). `awsum lsp` has served it since 0.0.5; only the documentation was missing it.
 
