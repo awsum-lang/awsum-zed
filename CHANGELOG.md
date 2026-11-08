@@ -10,6 +10,22 @@ Until `awsum 1.0.0`, the project does not follow SemVer — every release increm
 
 ## [Unreleased]
 
+## [0.0.8] - 2026-11-07
+
+### Fixed
+
+- **Nested block comments highlight correctly.** The grammar pin moves to `tree-sitter-awsum` 0.0.8, which parses `{- outer {- inner -} more -}` as one comment; before, a nested comment broke highlighting of the declaration after it.
+- **Bare type names in signatures are highlighted as types.** The extension's copy of the highlight query had fallen behind `tree-sitter-awsum`'s and coloured only applied types (`Maybe Int32`), so `Pick` and `Int32` in `pick : Pick -> Int32` stayed plain. Both query files (`highlights.scm`, `outline.scm`) are now exact copies of `tree-sitter-awsum` at the pinned commit.
+
+### Changed
+
+- Lockstep release with `awsum` 0.0.8.
+- Rust toolchain 1.93.1 → 1.99.1 (local `rust-toolchain.toml` and CI); `Cargo.lock` regenerated, holding back the two crates published within the last 7 days (`flate2` 1.1.10, `smallvec` 1.16.4).
+- CI: every GitHub Action pinned to the commit SHA of a release at least 7 days old.
+- Format on save is no longer advertised as built in. Since Zed turned format-on-save off by default (June 2026), it applies to Awsum only once enabled in the user's settings; the README now shows the setting. The `[format_on_save]` table in `languages/awsum/config.toml` is removed — Zed never read it (its language config has no such field); format-on-save used to work only because of Zed's former global default.
+- `just sync-queries` copies `tree-sitter-awsum`'s queries at the commit pinned in `extension.toml`, and `just check-queries` verifies them. The release workflow runs the check on every tag, so the copies can no longer drift from the pinned grammar.
+- The README lists hover (type and doc comment of the name under the cursor). `awsum lsp` has served it since 0.0.5; only the documentation was missing it.
+
 ## [0.0.7] - 2026-06-22
 
 ### Changed

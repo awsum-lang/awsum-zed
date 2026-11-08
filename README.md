@@ -5,9 +5,10 @@ Zed extension for the [Awsum](https://awsum-lang.org) programming language (`.aw
 ## Features
 
 - Syntax highlighting (Tree-sitter)
-- Format on save
+- Formatting (`editor: format`; on save once enabled — see [Format on save](#format-on-save))
 - Inline diagnostics (errors + warnings)
 - Quick fixes (lightbulb code actions)
+- Hover: type and doc comment of the name under the cursor
 - Document outline / breadcrumbs
 - Workspace symbol search (`Cmd+T` / `Ctrl+T`)
 
@@ -17,6 +18,20 @@ All of the above are powered by the `awsum` compiler's bundled language server �
 
 1. Install the Awsum compiler (see [awsum-lang/awsum](https://github.com/awsum-lang/awsum)) and ensure `awsum` is on your `PATH`.
 2. Open Zed → `Cmd+Shift+P` → `zed: extensions` → search "Awsum" → Install.
+
+## Format on save
+
+Zed turns format-on-save on only for the languages listed in its own default settings, and an extension cannot add itself to that list. To format `.aww` files on save, enable it for Awsum in your Zed `settings.json`:
+
+```json
+{
+  "languages": {
+    "Awsum": { "format_on_save": "on" }
+  }
+}
+```
+
+Formatting runs the same algorithm as `awsum format`.
 
 ## Restart the LSP server
 
@@ -32,6 +47,8 @@ Stops the `awsum lsp` process for the active buffer and starts a new one with th
 
 `awsum-zed A.B.C` is built and tested against `awsum A.B.C`. Mismatched versions are not supported — at startup the language server compares the extension's expected version against its own and shows a Zed notification on mismatch.
 
+Supported editor versions follow Awsum's [platform version policy](https://github.com/awsum-lang/awsum/blob/main/docs/platform-version-policy.md#editors): the minimum is the newest stable release that has been out for at least 7 days.
+
 ## Related
 
 - Compiler (hosts `awsum lsp`): [awsum-lang/awsum](https://github.com/awsum-lang/awsum)
@@ -41,7 +58,7 @@ Stops the `awsum lsp` process for the active buffer and starts a new one with th
 
 ## AI use
 
-This Zed extension is developed with substantial usage of generative AI. Every generated change is reviewed, edited, and accepted by a human before it lands in the repository, and no output is shipped unedited.
+This Zed extension is developed with substantial usage of generative AI.
 
 ## License
 
