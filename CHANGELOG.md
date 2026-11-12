@@ -10,6 +10,10 @@ Until `awsum 1.0.0`, the project does not follow SemVer — every release increm
 
 ## [Unreleased]
 
+### Changed
+
+- `rust-toolchain.toml` adds the `rust-analyzer` component, so editors run the server that matches the pinned toolchain.
+
 ## [0.0.8] - 2026-11-07
 
 ### Fixed
